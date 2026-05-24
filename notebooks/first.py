@@ -1,0 +1,1 @@
+print("karthik ai journey starts")
