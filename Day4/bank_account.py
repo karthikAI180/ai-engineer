@@ -93,18 +93,19 @@ class BankAccount:
             print(self.balance)
     def details(self):
         print("Bank account owner name is {} and have {} in their account".format(self.owner,self.balance))
-acc1=BankAccount("Karthik reddy",10000)
-acc2=BankAccount("Manasareddy",30000)
-acc3=BankAccount.from_string("kavyareddy,20000")
-acc1.deposit(500)
-acc2.withdraw(1000)
-acc3.withdraw(25000)
-print(acc1)
-print(repr(acc1))
-acc1.details()
-print(BankAccount.valid_amount(100))
-print(BankAccount.valid_amount(-50))
-print(BankAccount.total_accounts)
+if __name__ == "__main__":
+    acc1=BankAccount("Karthik reddy",10000)
+    acc2=BankAccount("Manasareddy",30000)
+    acc3=BankAccount.from_string("kavyareddy,20000")
+    acc1.deposit(500)
+    acc2.withdraw(1000)
+    acc3.withdraw(25000)
+    print(acc1)
+    print(repr(acc1))
+    acc1.details()
+    print(BankAccount.valid_amount(100))
+    print(BankAccount.valid_amount(-50))
+    print(BankAccount.total_accounts)
 
 
 
