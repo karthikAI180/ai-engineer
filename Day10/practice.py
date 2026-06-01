@@ -3,20 +3,10 @@ import pandas as pd
 # ============================================
 # TASK 1: Load & Inspect Titanic Dataset
 # ============================================
-
-# Load dataset from online
 df = pd.read_csv('https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv')
-
-# Display first 5 rows
 print(df.head())
-
-# Check data types
 print(df.dtypes)
-
-# General info about dataframe
 print(df.info())
-
-# Count nulls per column
 print(df.isna().sum())
 
 
@@ -39,7 +29,7 @@ filt = df['Survived'] == 1
 print(len(df[filt]))
 print(df[filt].head(3))
 
-# Filter 4: Combined conditions - Female AND Survived
+# Filter 4: Combined conditions
 filt1 = (df['Survived'] == 1) & (df['Sex'] == 'female')
 filt2 = (df['Survived'] == 1) & (df['Sex'] == 'female') & (df['Age'] > 25)
 print(len(df[filt1]))
@@ -52,9 +42,8 @@ filt1 = df['Name'].str.contains('th')
 print(len(df[filt1]))
 print(df[filt1].head(3))
 
-# Filter 6: Combined - Class 3 AND name contains 'th' (AND)
+# Filter 6: Combined conditions with AND and OR
 filt2 = (df['Pclass'] == 3) & (df['Name'].str.contains('th'))
-# Combined - Class 3 OR name contains 'th' (OR)
 filt3 = (df['Pclass'] == 3) | (df['Name'].str.contains('th'))
 print(len(df[filt2]))
 print(df[filt2].head(3))
@@ -94,7 +83,7 @@ print(df[filt].groupby(['Embarked'])['Survived'].sum())
 # TASK 4: groupby() Part 2 - Multi-level
 # ============================================
 
-# Survival rate by Class AND Sex together
+# Survival rate by Class AND Sex
 print(df.groupby(['Pclass', 'Sex'])['Survived'].mean())
 
 # Count passengers by Sex AND Embarked port
@@ -114,7 +103,7 @@ print(df.groupby(['Pclass', 'Sex'])['Fare'].sum())
 # TASK 5: Handle Null Values
 # ============================================
 
-# Sub-task 1: Drop all rows with any null - compare before and after
+# Sub-task 1: Drop all rows with any null
 print(len(df))
 print(len(df.dropna()))
 
@@ -123,4 +112,52 @@ print(len(df.dropna(subset=['Age'])))
 
 # Sub-task 3: Fill Age nulls with median and verify
 df['Age'] = df['Age'].fillna(df['Age'].median())
-print(df['Age'].isna().sum())  # Should be 0
+print(df['Age'].isna().sum())
+
+# Sub-task 4: Fill Embarked nulls with most common value
+print(df['Embarked'].isna().sum())
+value = df.groupby(['Embarked']).size().sort_values(ascending=False).head(1).index[0]
+df['Embarked'] = df['Embarked'].fillna(value)
+print(df['Embarked'].isna().sum())
+
+# Sub-task 5: Fill Cabin nulls with most common value
+value = df['Cabin'].mode()[0]
+df['Cabin'] = df['Cabin'].fillna(value)
+print(df['Cabin'].isna().sum())
+
+
+# ============================================
+# TASK 6: Merging
+# ============================================
+
+# Create summary table
+summary = df.groupby(['Pclass'])['Fare'].mean().reset_index()
+print(summary)
+
+# Rename columns to avoid confusion
+summary.columns = ['Pclass', 'Avg_Fare']
+
+# Merge back to original dataframe
+df_new = df.merge(summary, on='Pclass', how='inner')
+print(df_new.head(3))
+
+
+# ============================================
+# TASK 7: apply() Function
+# ============================================
+
+# Sub-task 1: Create Age_Category column
+def Age_Category(age):
+    if pd.isnull(age):
+        return 'Unknown'
+    if age < 13:
+        return 'Child'
+    elif age >= 13 and age < 18:
+        return 'Teen'
+    elif age >= 18 and age < 65:
+        return 'Adult'
+    else:
+        return 'Senior'
+
+df['Age_Category'] = df['Age'].apply(Age_Category)
+print(df.head(3))
