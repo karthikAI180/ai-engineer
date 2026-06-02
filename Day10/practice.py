@@ -42,7 +42,7 @@ filt1 = df['Name'].str.contains('th')
 print(len(df[filt1]))
 print(df[filt1].head(3))
 
-# Filter 6: Combined conditions with AND and OR
+# Filter 6: Combined AND and OR
 filt2 = (df['Pclass'] == 3) & (df['Name'].str.contains('th'))
 filt3 = (df['Pclass'] == 3) | (df['Name'].str.contains('th'))
 print(len(df[filt2]))
@@ -132,10 +132,8 @@ print(df['Cabin'].isna().sum())
 
 # Create summary table
 summary = df.groupby(['Pclass'])['Fare'].mean().reset_index()
-print(summary)
-
-# Rename columns to avoid confusion
 summary.columns = ['Pclass', 'Avg_Fare']
+print(summary)
 
 # Merge back to original dataframe
 df_new = df.merge(summary, on='Pclass', how='inner')
@@ -148,16 +146,47 @@ print(df_new.head(3))
 
 # Sub-task 1: Create Age_Category column
 def Age_Category(age):
-    if pd.isnull(age):
+    if pd.isna(age):
         return 'Unknown'
-    if age < 13:
+    elif age < 13:
         return 'Child'
-    elif age >= 13 and age < 18:
+    elif age > 13 and age < 18:
         return 'Teen'
-    elif age >= 18 and age < 65:
+    elif age > 18 and age < 65:
         return 'Adult'
     else:
-        return 'Senior'
+        return 'Old'
 
-df['Age_Category'] = df['Age'].apply(Age_Category)
+df['Age_category'] = df['Age'].apply(Age_Category)
 print(df.head(3))
+
+# Sub-task 2: Create Fare_Per_Person column
+def Fair(row):
+    return row['Fare'] / (row['SibSp'] + row['Parch'] + 1)
+
+df['Fare_Per_Person'] = df.apply(Fair, axis=1)
+print(df.head(3))
+
+# Sub-task 3: Create Total_Members column
+def Tm(row):
+    return (row['SibSp'] + row['Parch'] + 1)
+
+df['Total_Members'] = df.apply(Tm, axis=1)
+print(df.head(3))
+
+
+# ============================================
+# TASK 8: Put it all together
+# ============================================
+
+# Question 1: Survival rate by Sex and Class
+print(df.groupby(['Sex', 'Pclass'])['Survived'].mean())
+
+# Question 2: Which age group survived most?
+print(df.groupby(['Age_category'])['Survived'].mean().sort_values(ascending=False))
+
+# Question 3: Average fare comparison by class
+print(df.groupby(['Pclass'])['Fare'].mean())
+
+# Question 4: Survival rate by embarked port
+print(df.groupby(['Embarked'])['Survived'].mean())
