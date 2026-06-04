@@ -1,0 +1,10 @@
+import pandas as pd
+
+def second_highest_salary(employee: pd.DataFrame) -> pd.DataFrame:
+    employee.sort_values('salary',ascending=False,inplace=True)
+    employee['rank']=employee['salary'].rank(method='dense',ascending=False)
+    if employee['rank'].max()<2 or employee.empty:
+         return pd.DataFrame({'SecondHighestSalary': [None]})
+    filt=employee['rank']==2
+    return employee[filt][['salary']].iloc[0:1].rename(columns={'salary':'SecondHighestSalary'})
+    
