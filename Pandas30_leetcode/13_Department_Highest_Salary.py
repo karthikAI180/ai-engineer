@@ -3,6 +3,7 @@ def department_highest_salary(employee: pd.DataFrame, department: pd.DataFrame) 
     
     # Add a column with max salary per department
     k['max_salary'] = k.groupby('departmentId')['salary'].transform('max')
+    #k
     
     # Keep only rows where salary equals max_salary for that department
     result = k[k['salary'] == k['max_salary']]
