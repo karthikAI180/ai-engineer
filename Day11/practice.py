@@ -82,9 +82,3 @@ plt.savefig('6_violin.png', dpi=300, bbox_inches='tight')
 
 
 print("✅ All 6 charts created and saved!")
-plt.savefig('1_scatter.png', dpi=300, bbox_inches='tight')
-plt.savefig('2_bar.png', dpi=300, bbox_inches='tight')
-plt.savefig('3_histogram.png', dpi=300, bbox_inches='tight')
-plt.savefig('4_boxplot.png', dpi=300, bbox_inches='tight')
-plt.savefig('5_heatmap.png', dpi=300, bbox_inches='tight')
-plt.savefig('6_violin.png', dpi=300, bbox_inches='tight')
