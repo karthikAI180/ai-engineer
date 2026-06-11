@@ -10,7 +10,7 @@ class Solution:
             res=i if k[i]>maxcount else res
             maxcount=max(k[i],maxcount)
         print(k)
-        # for k,v in k.items():
+         #USING DICT for k,v in k.items():
         #     if v>len(nums)/2:
         #         return k
         return res
